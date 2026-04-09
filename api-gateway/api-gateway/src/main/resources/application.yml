@@ -16,7 +16,7 @@ spring:
                 - id: sensor-service
                   uri: lb://sensor-service
                   predicates:
-                      - Path=/api/sensors/**
+                      - Path=/api/v1/sensors/**
                 - id: automation-service
                   uri: lb://automation-service
                   predicates:
