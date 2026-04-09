@@ -12,7 +12,7 @@ spring:
                 - id: zone-service
                   uri: lb://zone-service
                   predicates:
-                      - Path=/api/zones/**
+                      - Path=/api/v1/zones/**
                 - id: sensor-service
                   uri: lb://sensor-service
                   predicates:
