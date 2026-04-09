@@ -9,6 +9,7 @@
         <module name="config-server" />
         <module name="automation-service" />
         <module name="crop-service" />
+        <module name="api-gateway" />
         <module name="sensor-service" />
         <module name="zone-service" />
         <module name="eureka-server" />
