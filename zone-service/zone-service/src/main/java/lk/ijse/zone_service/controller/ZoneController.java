@@ -24,4 +24,12 @@ public class ZoneController {
     public List<Zone> getAllZones() {
         return zoneRepository.findAll();
     }
+
+    // Zone Service එකේ ZoneController.java
+    @GetMapping("/{id}")
+    public ResponseEntity<Zone> getZoneById(@PathVariable String id) {
+        return zoneRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
