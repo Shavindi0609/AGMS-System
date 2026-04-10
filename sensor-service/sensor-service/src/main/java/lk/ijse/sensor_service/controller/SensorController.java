@@ -1,5 +1,6 @@
 package lk.ijse.sensor_service.controller;
 
+import lk.ijse.sensor_service.client.ZoneClient;
 import lk.ijse.sensor_service.entity.Sensor;
 import lk.ijse.sensor_service.repository.SensorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,30 @@ public class SensorController {
     @Autowired
     private SensorRepository sensorRepository;
 
+    @Autowired
+    private ZoneClient zoneClient; // අලුතින් හදපු client එක inject කරන්න
+
+//    @PostMapping
+//    public ResponseEntity<Sensor> saveSensor(@RequestBody Sensor sensor) {
+//        // මෙතනදී පස්සේ කාලෙක අපිට පුළුවන් Zone Service එකට කතා කරලා
+//        // ඇත්තටම මේ zoneCode එක තියෙනවද කියලා බලන්න (OpenFeign පාවිච්චි කරලා)
+//        return ResponseEntity.ok(sensorRepository.save(sensor));
+//    }
+
     @PostMapping
-    public ResponseEntity<Sensor> saveSensor(@RequestBody Sensor sensor) {
-        // මෙතනදී පස්සේ කාලෙක අපිට පුළුවන් Zone Service එකට කතා කරලා
-        // ඇත්තටම මේ zoneCode එක තියෙනවද කියලා බලන්න (OpenFeign පාවිච්චි කරලා)
-        return ResponseEntity.ok(sensorRepository.save(sensor));
+    public ResponseEntity<?> saveSensor(@RequestBody Sensor sensor) {
+        try {
+            // Zone Service එකෙන් අදාළ Zone එක තියෙනවද කියලා බලනවා
+            Object zone = zoneClient.getZoneById(sensor.getZoneCode());
+
+            if (zone != null) {
+                return ResponseEntity.ok(sensorRepository.save(sensor));
+            }
+        } catch (Exception e) {
+            // Zone එක නැති වුණොත් හෝ Service එක Down නම් මෙතනට එනවා
+            return ResponseEntity.badRequest().body("Invalid Zone Code: " + sensor.getZoneCode());
+        }
+        return ResponseEntity.internalServerError().build();
     }
 
     @GetMapping
