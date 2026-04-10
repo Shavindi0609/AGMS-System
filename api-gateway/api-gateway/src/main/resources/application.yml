@@ -1,32 +1,96 @@
+#server:
+#    port: 8080
+#
+#spring:
+#    application:
+#        name: api-gateway
+#    config:
+#      import: "optional:configserver:http://localhost:8888"
+#    cloud:
+#        gateway:
+#            routes:
+#                - id: zone-service
+#                  uri: lb://zone-service
+#                  predicates:
+#                      - Path=/api/v1/zones/**
+#                - id: sensor-service
+#                  uri: lb://sensor-service
+#                  predicates:
+#                      - Path=/api/v1/sensors/**
+#                - id: automation-service
+#                  uri: lb://automation-service
+#                  predicates:
+#                      - Path=/api/automation/**
+#                - id: crop-service
+#                  uri: lb://crop-service
+#                  predicates:
+#                      - Path=/api/crops/**
+#
+#eureka:
+#    client:
+#        serviceUrl:
+#            defaultZone: http://localhost:8761/eureka/
+#
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: sensor-service
+#          uri: lb://SENSOR-SERVICE
+#          predicates:
+#            - Path=/api/v1/sensors/**
+#          filters:
+#            - AuthenticationFilter # අපි හදපු filter එක මෙතනට දාන්න
+
 server:
-    port: 8080
+  port: 8080
 
 spring:
-    application:
-        name: api-gateway
-    config:
-      import: "optional:configserver:http://localhost:8888"
-    cloud:
-        gateway:
-            routes:
-                - id: zone-service
-                  uri: lb://zone-service
-                  predicates:
-                      - Path=/api/v1/zones/**
-                - id: sensor-service
-                  uri: lb://sensor-service
-                  predicates:
-                      - Path=/api/v1/sensors/**
-                - id: automation-service
-                  uri: lb://automation-service
-                  predicates:
-                      - Path=/api/automation/**
-                - id: crop-service
-                  uri: lb://crop-service
-                  predicates:
-                      - Path=/api/crops/**
+  application:
+    name: api-gateway
+  config:
+    import: "optional:configserver:http://localhost:8888"
+  cloud:
+    gateway:
+      routes:
+        # Identity Service (මේකට Filter එක අවශ්‍ය නැහැ - Token ගන්න තැන නිසා)
+        - id: identity-service
+          uri: lb://IDENTITY-SERVICE
+          predicates:
+            - Path=/auth/**
+
+        # Zone Service (Filter එක අවශ්‍යයි)
+        - id: zone-service
+          uri: lb://ZONE-SERVICE
+          predicates:
+            - Path=/api/v1/zones/**
+          filters:
+            - AuthenticationFilter
+
+        # Sensor Service (Filter එක අවශ්‍යයි)
+        - id: sensor-service
+          uri: lb://SENSOR-SERVICE
+          predicates:
+            - Path=/api/v1/sensors/**
+          filters:
+            - AuthenticationFilter
+
+        # අනෙක් සර්විස් වලටත් මේ විදිහටම filters එකතු කරන්න...
+        - id: automation-service
+          uri: lb://AUTOMATION-SERVICE
+          predicates:
+            - Path=/api/automation/**
+          filters:
+            - AuthenticationFilter
 
 eureka:
-    client:
-        serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
+    org.springframework.web.reactive: DEBUG
+    lk.ijse.api_gateway: DEBUG

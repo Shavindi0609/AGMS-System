@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/eureka-server/eureka-server/pom.xml" />
         <option value="$PROJECT_DIR$/sensor-service/sensor-service/pom.xml" />
         <option value="$PROJECT_DIR$/automation-service/automation-service/pom.xml" />
+        <option value="$PROJECT_DIR$/identity-service/identity-service/pom.xml" />
       </list>
     </option>
   </component>
