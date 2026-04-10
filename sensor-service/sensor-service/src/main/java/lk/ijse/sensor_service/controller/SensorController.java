@@ -1,5 +1,6 @@
 package lk.ijse.sensor_service.controller;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lk.ijse.sensor_service.client.ZoneClient;
 import lk.ijse.sensor_service.entity.Sensor;
 import lk.ijse.sensor_service.repository.SensorRepository;
@@ -26,6 +27,7 @@ public class SensorController {
 //        return ResponseEntity.ok(sensorRepository.save(sensor));
 //    }
 
+    @CircuitBreaker(name = "zoneServiceBreaker", fallbackMethod = "zoneFallback")
     @PostMapping
     public ResponseEntity<?> saveSensor(@RequestBody Sensor sensor) {
         try {
