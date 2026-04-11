@@ -83,6 +83,14 @@ spring:
           filters:
             - AuthenticationFilter
 
+              # Crop Inventory Service (Filter එක අවශ්‍යයි)
+        - id: crop-inventory-service
+          uri: lb://CROP-SERVICE
+          predicates:
+            - Path=/api/v1/crops/**
+          filters:
+            - AuthenticationFilter
+
 eureka:
   client:
     service-url:

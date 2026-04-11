@@ -38,7 +38,7 @@ public class TelemetryFetcher {
     // sensor-service -> TelemetryFetcher.java
     @Scheduled(fixedRate = 10000)
     public void fetchAndPush() {
-        String deviceId = "DEV-9c242d11"; // ඔයාට ලැබුණු ID එක
+        String deviceId = "DEV-7696fbe4"; // ඔයාට ලැබුණු ID එක
         String externalApiUrl = "http://104.211.95.241:8080/api/devices/telemetry/" + deviceId;
 
         try {
