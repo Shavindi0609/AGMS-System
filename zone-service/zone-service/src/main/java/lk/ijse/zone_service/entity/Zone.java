@@ -17,4 +17,7 @@ public class Zone {
     private String zoneLocation;
     private Double zoneSize;
     private String zoneDescription;
+    private String deviceId;
+    private Double minTemp; // අලුතින් එකතු කරන්න
+    private Double maxTemp; // අලුතින් එකතු කරන්න
 }
